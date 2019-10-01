@@ -16,23 +16,40 @@ public class HelloServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(HelloServlet.class);
     private static final String NAME_PARAM = "name";
 
+    private HelloService service;
+
+    public HelloServlet(){
+        this(new HelloService());
+    }
+
+    /**
+     *Servlet container needs it
+     */
+    @SuppressWarnings("unused")
+    public HelloServlet(HelloService service) {
+        this.service = service;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.info("Got request with parameters " + req.getParameterMap());
+        resp.getWriter().write(service.prepareGreeting(req.getParameter(NAME_PARAM)));
+
+
 
 //           String name = Optional.ofNullable(req.getParameter(NAME_PARAM)).orElse("world");
 //           resp.getWriter().write("Hello " + name + "!");
-
-        String name = req.getParameter(NAME_PARAM);
-        resp.getWriter().write(checkNameParameter(name));
-    }
-
-    private String checkNameParameter(String name) {
-        if (name == null || name.isEmpty()) {
-            name = "Hello world";
-        } else {
-            name = "Hello " + name + "!";
-        }
-        return name;
+//
+//        String name = req.getParameter(NAME_PARAM);
+//        resp.getWriter().write(checkNameParameter(name));
+//    }
+//
+//    private String checkNameParameter(String name) {
+//        if (name == null || name.isEmpty()) {
+//            name = "Hello world";
+//        } else {
+//            name = "Hello " + name + "!";
+//        }
+//        return name;
     }
 }
