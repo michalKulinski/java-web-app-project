@@ -3,33 +3,92 @@ package app;
 
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 public class HelloServiceTest {
-
-    private HelloService SUT = new HelloService();
+        private final static String WELCOME = "Hello";
+        private final static String FALLBACK_ID_WELCOME = "Hola";
 
     @Test
-    public void test_prepareGreeting_null_returnsFallbackValue()throws Exception{
-        //given + when
-        String result = SUT.prepareGreeting(null);
+    public void test_prepareGreeting_nullName_returnsFallbackName()throws Exception{
+        //given
+        LangRepository mockRepository = alwaysReturningHelloRepository();
+        HelloService SUT = new HelloService(mockRepository);
+
+        //when
+        String result = SUT.prepareGreeting(null, "-1");
 
         //then
-        assertEquals("Hello " + HelloService.FALLBACK_NAME + "!", result);
+        assertEquals(WELCOME + " " + HelloService.FALLBACK_NAME + "!", result);
 
     }
 
     @Test
-    public void test_prepareGreeting_name_returnsFallbackValue()throws Exception{
+    public void test_prepareGreeting_name_returnsGreetingWithName()throws Exception{
         //given
+        LangRepository mockRepository = alwaysReturningHelloRepository();
+        HelloService SUT = new HelloService(mockRepository);
         String name = "test";
 
         //when
-        String result = SUT.prepareGreeting(name);
+        String result = SUT.prepareGreeting(name, "-1");
 
         //then
-        assertEquals("Hello " + name + "!", result);
+        assertEquals(WELCOME + " " + name + "!", result);
 
     }
 
+    @Test
+    public void test_prepareGreeting_nullLang_returnsGreetingWithFallbackIdLang(){
+        //given
+        LangRepository mockRepository = fallbackLangIdRepository();
+
+        HelloService SUT = new HelloService(mockRepository);
+        String name = "test";
+
+        //when
+        String result = SUT.prepareGreeting(null, null);
+
+        //then
+        assertEquals(FALLBACK_ID_WELCOME + " " + HelloService.FALLBACK_NAME + "!", result);
+
+    }
+
+    @Test
+    public void test_prepareGreeting_textLang_returnsGreetingWithFallbackIdLang(){
+        //given
+        LangRepository mockRepository = fallbackLangIdRepository();
+
+        HelloService SUT = new HelloService(mockRepository);
+        String name = "test";
+
+        //when
+        String result = SUT.prepareGreeting(null, "abc");
+
+        //then
+        assertEquals(FALLBACK_ID_WELCOME + " " + HelloService.FALLBACK_NAME + "!", result);
+
+    }
+    private LangRepository fallbackLangIdRepository() {
+        return new LangRepository(){
+                @Override
+                Optional<Lang> findById(Long id) {
+                    if(id.equals(HelloService.FALLBACK_LANG.getId())) {
+                        return Optional.of(new Lang(null, FALLBACK_ID_WELCOME, null));
+                    }
+                    return Optional.empty();
+                }
+            };
+    }
+
+    private LangRepository alwaysReturningHelloRepository() {
+        return new LangRepository() {
+            @Override
+            Optional<Lang> findById(Long id) {
+                return Optional.of(new Lang(null, WELCOME, null));
+            }
+        };
+    }
  }
