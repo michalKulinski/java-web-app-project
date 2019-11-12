@@ -10,8 +10,8 @@ import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.webapp.*;
 
-public class Hello {
-    private static final Logger logger = LogManager.getLogger(Hello.class);
+public class App {
+    private static final Logger logger = LogManager.getLogger(App.class);
 
     public static void main(String[] args) throws Exception {
 

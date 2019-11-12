@@ -1,4 +1,4 @@
-package app;
+package app.lang;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +16,7 @@ import java.io.IOException;
 public class LangServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(LangServlet.class);
 
-    private LangRepository repository;
+    private LangService service;
     private ObjectMapper mapper;
 
 
@@ -25,11 +25,11 @@ public class LangServlet extends HttpServlet {
      */
 //    unused
     public LangServlet(){
-        this(new LangRepository(), new ObjectMapper());
+        this(new LangService(), new ObjectMapper());
     }
 
-    LangServlet(LangRepository repository, ObjectMapper mapper) {
-        this.repository = repository;
+    LangServlet(LangService service, ObjectMapper mapper) {
+        this.service = service;
         this.mapper = mapper;
     }
 
@@ -37,7 +37,7 @@ public class LangServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         logger.info("Got request with parameters " + req.getParameterMap());
         resp.setContentType("application/json;charset=UTF-8");
-        mapper.writeValue(resp.getOutputStream(), repository.findAll());
+        mapper.writeValue(resp.getOutputStream(), service.findAll());
         //resp.getWriter().write(service.prepareGreeting(name, lang));
     }
 }

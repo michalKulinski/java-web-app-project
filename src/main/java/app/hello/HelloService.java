@@ -1,11 +1,13 @@
-package app;
+package app.hello;
 
+import app.lang.Lang;
+import app.lang.LangRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
-class HelloService {
+public class HelloService {
 
     static final String FALLBACK_NAME = "world";
     static final Lang FALLBACK_LANG = new Lang(1,"Hello","en");

@@ -1,5 +1,6 @@
-package app;
+package app.lang;
 
+import app.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-class LangRepository {
+public class LangRepository {
 
     List<Lang> findAll(){
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -20,7 +21,7 @@ class LangRepository {
         return result;
     }
 
-    Optional<Lang> findById(Integer id){
+    public Optional<Lang> findById(Integer id){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
 
